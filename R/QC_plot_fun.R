@@ -1,7 +1,7 @@
 #' Plot Expression Value Boxplots for Samples
 #'
 #' @param Y a matrix of expression values with row names corresponding to genes and column names to sample names
-#' @param n the number of samples used to plot the 
+#' @param n the number of samples used to plot the boxplots. Default is 10
 #' 
 #' @return boxplots for the expression values with each representing those of a sample
 #' 
