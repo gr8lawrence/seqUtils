@@ -2,5 +2,6 @@
 
 S3method(plot,bp)
 export(pw.scatter)
+import(ggplot2)
 importFrom(dplyr,as_tibble)
 importFrom(tidyr,pivot_longer)

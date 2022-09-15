@@ -12,6 +12,7 @@
 #' 
 #' @importFrom dplyr as_tibble
 #' @importFrom tidyr pivot_longer
+#' @import ggplot2
 #' @export
 
 plot.bp <- function(Y, n = 10) {
@@ -27,9 +28,9 @@ plot.bp <- function(Y, n = 10) {
   long_df$samples = factor(long_df$samples, levels = colnames(Y), ordered = TRUE)
   long_df = long_df[which(long_df$nc >= 0), ] # such intensities could be negative if using microarray
   long_df$log10nc = log(long_df$nc + 1, base = 10) 
-  p = ggplot2::ggplot(data = long_df, aes(x = samples, y = log10nc)) +
-    geom_boxplot() +
-    labs(y = bquote("log"[10] ~ "(count + 1)"),
+  p = ggplot2::ggplot(data = long_df, ggplot2::aes(x = samples, y = log10nc)) +
+    ggplot2::geom_boxplot() +
+    ggplot2::labs(y = bquote("log"[10] ~ "(count + 1)"),
          x = 'Samples')
   
   return(p)
