@@ -3,6 +3,6 @@
 ## Install Packages
 
 Install this package by using the `install_github()` function from the `devtools` package:
-```
+```r
 devtools::install_github("gr8lawrence/seqUtils")
 ```
