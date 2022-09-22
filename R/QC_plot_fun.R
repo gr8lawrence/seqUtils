@@ -7,15 +7,15 @@
 #' 
 #' @examples 
 #' data(example)
-#' plot.bp(Y = example)
-#' plot.bp(Y = example, n = 5)
+#' expr.bp(Y = example)
+#' expr.bp(Y = example, n = 5)
 #' 
 #' @importFrom dplyr as_tibble
 #' @importFrom tidyr pivot_longer
 #' @import ggplot2
 #' @export
 
-plot.bp <- function(Y, n = 10) {
+expr.bp <- function(Y, n = 10) {
   if (n > 10) {
     message("It is recommended to only plot the first few samples (n <= 10) for best visualization.")
   }
