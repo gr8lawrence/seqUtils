@@ -59,10 +59,10 @@ man.filter <- function(raw, min_sum = 10, min_var = 1e-4, verbose = TRUE) {
       message(paste0("A total of ", length(all_ids), " rows are removed."))
       message("Detailed removal info is below. There maybe rows that fit multiple criteria below:")
       if (length(bad_name_ids) > 0) message(paste0(length(bad_name_ids), " non-gene rows are removed."))
-      if (length(no_read_ids)  > 0) message(paste0(length(no_read_ids), " rows with small sum of counts are removed."))
-      if (length(no_var_ids)  > 0) message(paste0(length(no_var_ids), " rows with small variance of counts are removed."))
-      if (length(dup_ids) > 0) message(paste0(length(no_dup_ids), " duplicate rows are removed."))
-      if (length(gt_ids) > 0) message(paste0(length(no_dup_ids), " row for the grand totals are removed."))
+      if (length(no_read_ids)  > 0) message(paste0(length(no_read_ids), " rows with small sum of counts (<", min_sum , ") are removed."))
+      if (length(no_var_ids)  > 0) message(paste0(length(no_var_ids), " rows with small variance of counts (<", min_var , ") are removed."))
+      if (length(dup_ids) > 0) message(paste0(length(dup_ids), " duplicate rows are removed."))
+      if (length(gt_ids) > 0) message(paste0(length(gt_ids), " row for the grand totals are removed."))
     }
   }
   
