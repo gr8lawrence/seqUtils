@@ -17,7 +17,7 @@
 #' 
 #' @return a filtered raw sequencing data based on the specified values
 #' 
-#' #' @examples 
+#' @examples 
 #' data(example)
 #' example[1, ] = runif(ncol(example), 0, 0.01) # to create an example gene with low expression
 #' example[2, ] = 15 # an example of gene with no variation
