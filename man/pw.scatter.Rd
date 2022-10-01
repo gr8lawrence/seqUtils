@@ -4,7 +4,7 @@
 \alias{pw.scatter}
 \title{Plot Pairwise Scatterplot for Samples}
 \usage{
-pw.scatter(Y, notes = NULL, dir_name = ".", par_param = c(3, 3))
+pw.scatter(Y, notes = NULL, dir_name = ".", par_param = c(3, 3), ...)
 }
 \arguments{
 \item{Y}{a matrix of expression values with row names corresponding to genes and column names to sample names}
@@ -14,6 +14,8 @@ pw.scatter(Y, notes = NULL, dir_name = ".", par_param = c(3, 3))
 \item{dir_name}{name of the directory to which the output jpeg files are saved. Default is the working directory (\code{getwd()})}
 
 \item{par_param}{a vector of 2 specifying the number of rows and columns of the output plots. Default is \code{c(3, 3)}}
+
+\item{...}{other parameters for the \link[base:plot]{base::plot} function}
 }
 \value{
 output no direct return but save the pairwise scatterplots in a jpeg file to the named directory

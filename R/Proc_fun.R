@@ -68,3 +68,4 @@ man.filter <- function(raw, min_sum = 10, min_var = 1e-4, verbose = TRUE) {
   
   return(raw)
 }
+

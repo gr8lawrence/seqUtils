@@ -42,6 +42,7 @@ expr.bp <- function(Y, n = 10) {
 #' @param notes additional notes for file names, such as generations, platforms, sample information, etc. Default is \code{NULL}
 #' @param dir_name name of the directory to which the output jpeg files are saved. Default is the working directory (\code{getwd()})
 #' @param par_param a vector of 2 specifying the number of rows and columns of the output plots. Default is \code{c(3, 3)}
+#' @param ... other parameters for the [base::plot] function
 #'
 #' @return output no direct return but save the pairwise scatterplots in a jpeg file to the named directory
 #' 
@@ -53,7 +54,7 @@ expr.bp <- function(Y, n = 10) {
 #'
 #' @export
 
-pw.scatter <- function(Y, notes = NULL, dir_name = '.', par_param = c(3, 3)) {
+pw.scatter <- function(Y, notes = NULL, dir_name = '.', par_param = c(3, 3), ...) {
   n = ncol(Y)
   if (is.null(notes)) {
     jpeg(paste(dir_name, "scatterplots%03d.jpeg", sep = '/'),
@@ -71,8 +72,8 @@ pw.scatter <- function(Y, notes = NULL, dir_name = '.', par_param = c(3, 3)) {
       name2 = colnames(Y)[j]
       p_cor = round(cor(col1, col2, method = "pearson"), 3)
       plot(log10(col1 + 1), log10(col2 + 1), col = "blue", xlab = name1, ylab = name2, 
-           main = paste(name1, "vs.", name2), sub = paste("Pearson's cor =", p_cor, "for original counts"), col.sub = "red",
-           xlim = c(0, 5), ylim = c(0, 5))
+           main = paste(name1, "vs.", name2), sub = paste("Pearson's cor =", p_cor), col.sub = "red",
+           ...)
       abline(a = 0, b = 1, col = "orange")
     }
   }
