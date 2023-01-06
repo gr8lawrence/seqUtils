@@ -79,3 +79,9 @@ pw.scatter <- function(Y, notes = NULL, dir_name = '.', par_param = c(3, 3), ...
   }
   dev.off()
 }
+
+#' Plot a Heatmap for Pairwise Expression Correlation
+
+pw.cor.heatmap <- function(Y, coldata) {
+  ## TODO: finish the function
+}
