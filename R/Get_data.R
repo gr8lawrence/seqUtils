@@ -3,13 +3,24 @@
 #' This function downloads and process microarray gene expression data stored in the GSE format from GEO into a count matrix using
 #' its accession number. This function makes use of the GEOquery package built by Sean Davis.
 #' 
+#' @param acc_number the GSE accession number to the dataset.
+#' @param take_log whether we want to log2-transform the expression matrix. The default is `FALSE`.
+#' @param ... other parameters to be passed to [GEOquery::getGEO].
 #' 
+#' @return a list containing two fields: `data_matrix` gives the genotype expression data in a matrix form; 
+#' `p_data` gives the phenotype data in a data frame.
+#' 
+#' @importFrom GEOquery getGEO
+#' @importFrom GEOquery GPLList
+#' @importFrom GEOquery Table
+#' @importFrom BioGenerics Filter
+#' @export
 
-get_GSE_microarray <- function(acc_number, take_log = FALSE) {
+get_GSE_microarray <- function(acc_number, take_log = FALSE, ...) {
   
   ## download the data and the series matrix
-  gse <- getGEO(acc_number, GSEMatrix = FALSE)
-  gse_series <- getGEO(acc_number, GSEMatrix = TRUE, AnnotGPL = TRUE)[[paste(acc_number, 'series_matrix.txt.gz', sep = '_')]]
+  gse <- GEOquery::getGEO(acc_number, GSEMatrix = FALSE, ...)
+  gse_series <- GEOquery::getGEO(acc_number, GSEMatrix = TRUE, AnnotGPL = TRUE, ...)[[paste(acc_number, 'series_matrix.txt.gz', sep = '_')]]
   
   ## return an error is there is more than one platforms in this GSE platform
   pl_list <- GEOquery::GPLList(gse)
