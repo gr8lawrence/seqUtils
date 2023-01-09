@@ -1,31 +1,24 @@
-#' Download and process the GSE data from Gene Expression Omnibus (GEO) by its accession number
+#' Download and process the microarray data from Gene Expression Omnibus (GEO) by its GSE accession number
 #'
-#' This function downloads and process gene expression data stored in the GSE format from GEO into a count matrix using
+#' This function downloads and process microarray gene expression data stored in the GSE format from GEO into a count matrix using
 #' its accession number. This function makes use of the GEOquery package built by Sean Davis.
 #' 
 #' 
 
-get_GSE <- function(acc_number, take_log = FALSE) {
+get_GSE_microarray <- function(acc_number, take_log = FALSE) {
   
   ## download the data and the series matrix
   gse <- getGEO(acc_number, GSEMatrix = FALSE)
   gse_series <- getGEO(acc_number, GSEMatrix = TRUE, AnnotGPL = TRUE)[[paste(acc_number, 'series_matrix.txt.gz', sep = '_')]]
   
-  ## inspect GSM and GPL elements
-  # names(GEOquery::GSMList(gse))
-  # names(GEOquery::GPLList(gse))
-  ## return an error is there is more than one platforms
+  ## return an error is there is more than one platforms in this GSE platform
   pl_list <- GEOquery::GPLList(gse)
   if (length(names(pl_list)) > 1) stop('More than one platforms found in the GSE data.')
-  
-  ## get the platforms of each GSM (since each GSM contains one platform)
-  # gse_gsmplatforms <- lapply(GSMList(gse), function(x) {Meta(x)$platform_id})
 
   ## only take GSMs from one platform
   gse_gsmlist <- BiocGenerics::Filter(function(gsm) {Meta(gsm)$platform_id == names()[1]}, GSMList(gse))
-  # GEOquery::Table(gse_gsmlist[[1]])[1:5, ] # we can see the value of microarray expression values
-  
-  ## get the probeset
+
+  ## get the active probesets (for microarrays)
   gse_probesets <- GEOquery::Table(pl_list[[1]])$ID
   gse_probe_subsets <- intersect(gse_probesets, GEOquery::Table(gse_gsmlist[[1]])$ID_REF)
   
@@ -39,5 +32,11 @@ get_GSE <- function(acc_number, take_log = FALSE) {
   data_matrix <- data_matrix[, which(!is.na(colSums(data_matrix)))]
   if (take_log) data_matrix <- log2(data_matrix) # log2-transform if take_log is TRUE
   
+  ## getting the phenotype data
+  p_data_names <- names(gse_series @ phenoData @ data)
+  p_data <- (gse_series @ phenoData @ data)[, grep(':ch1', p_data_names)]
   
+  ## return a list that contains both genotype and phenotype data
+  data_ls <- list(data_matrix = data_matrix, p_data = p_data)
+  data_ls
 }
