@@ -1,9 +1,9 @@
 #' Download and process the microarray data from Gene Expression Omnibus (GEO) by its GSE accession number
 #'
-#' This function downloads and process microarray gene expression data stored in the GSE format from GEO into a count matrix using
+#' This function downloads and processes microarray gene expression data stored in the GSE format from GEO into a count matrix using
 #' its accession number. This function makes use of the GEOquery package built by Sean Davis.
 #' 
-#' @param acc_number the GSE accession number to the dataset.
+#' @param acc_number the GEO accession number of the microarray data.
 #' @param take_log whether we want to log2-transform the expression matrix. The default is `FALSE`.
 #' @param ... other parameters to be passed to [GEOquery::getGEO].
 #' 
@@ -11,12 +11,19 @@
 #' `p_data` gives the phenotype data in a data frame.
 #' 
 #' @importFrom GEOquery getGEO
+#' @importFrom GEOquery Meta
+#' @importFrom GEOquery GSMList
 #' @importFrom GEOquery GPLList
 #' @importFrom GEOquery Table
-#' @importFrom BioGenerics Filter
+#' @importFrom BiocGenerics Filter
+#' 
+#' @examples 
+#' ls <- get.GSE.microarray('GSE61754')
+#' ls
+#' 
 #' @export
 
-get_GSE_microarray <- function(acc_number, take_log = FALSE, ...) {
+get.GSE.microarray <- function(acc_number, take_log = FALSE, ...) {
   
   ## download the data and the series matrix
   gse <- GEOquery::getGEO(acc_number, GSEMatrix = FALSE, ...)
@@ -27,7 +34,7 @@ get_GSE_microarray <- function(acc_number, take_log = FALSE, ...) {
   if (length(names(pl_list)) > 1) stop('More than one platforms found in the GSE data.')
 
   ## only take GSMs from one platform
-  gse_gsmlist <- BiocGenerics::Filter(function(gsm) {Meta(gsm)$platform_id == names()[1]}, GSMList(gse))
+  gse_gsmlist <- BiocGenerics::Filter(function(gsm) {GEOquery::Meta(gsm)$platform_id == names(pl_list)[1]}, GEOquery::GSMList(gse))
 
   ## get the active probesets (for microarrays)
   gse_probesets <- GEOquery::Table(pl_list[[1]])$ID

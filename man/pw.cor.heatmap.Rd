@@ -2,10 +2,23 @@
 % Please edit documentation in R/QC_plot_fun.R
 \name{pw.cor.heatmap}
 \alias{pw.cor.heatmap}
-\title{Plot a Heatmap for Pairwise Expression Correlation}
+\title{Plot a Heat map for Pairwise Correlation}
 \usage{
-pw.cor.heatmap(Y, coldata)
+pw.cor.heatmap(Y, inds = seq_len(ncol(Y)))
+}
+\arguments{
+\item{Y}{the matrix whose pairwise correlations between columns we are interested in.}
+
+\item{inds}{the array of column indices of \code{Y} we wish to plot. The default is all columns of \code{Y}.}
 }
 \description{
-Plot a Heatmap for Pairwise Expression Correlation
+Plot the pairwise correlations of columns of a given matrix in a heat map.
+}
+\examples{
+Y <- matrix(c(1:4, 1:4, 4:1), 4, 3)
+p <- pw.cor.heatmap(Y)
+p2 <- pw.cor.heatmap(Y, c(1, 3))
+p
+p2
+
 }

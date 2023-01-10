@@ -19,16 +19,16 @@ expr.bp <- function(Y, n = 10) {
   if (n > 10) {
     message("It is recommended to only plot the first few samples (n <= 10) for best visualization.")
   }
-  df = dplyr::as_tibble(Y[, seq_len(n)])
-  df$Gene = rownames(Y)
-  long_df = tidyr::pivot_longer(data = df, 
+  df <- dplyr::as_tibble(Y[, seq_len(n)])
+  df$Gene <- rownames(Y)
+  long_df <- tidyr::pivot_longer(data = df, 
                                 cols = seq(1, ncol(df) - 1), 
                                 names_to = "samples", 
                                 values_to = "nc")
-  long_df$samples = factor(long_df$samples, levels = colnames(Y), ordered = TRUE)
-  long_df = long_df[which(long_df$nc >= 0), ] # such intensities could be negative if using microarray
-  long_df$log10nc = log(long_df$nc + 1, base = 10) 
-  p = ggplot2::ggplot(data = long_df, ggplot2::aes(x = samples, y = log10nc)) +
+  long_df$samples <- factor(long_df$samples, levels = colnames(Y), ordered = TRUE)
+  long_df <- long_df[which(long_df$nc >= 0), ] # such intensities could be negative if using microarray
+  long_df$log10nc <- log(long_df$nc + 1, base = 10) 
+  p <- ggplot2::ggplot(data = long_df, ggplot2::aes(x = samples, y = log10nc)) +
     ggplot2::geom_boxplot() +
     ggplot2::labs(y = bquote("log"[10] ~ "(count + 1)"),
          x = 'Samples')
@@ -55,7 +55,7 @@ expr.bp <- function(Y, n = 10) {
 #' @export
 
 pw.scatter <- function(Y, notes = NULL, dir_name = '.', par_param = c(3, 3), ...) {
-  n = ncol(Y)
+  n <- ncol(Y)
   if (is.null(notes)) {
     jpeg(paste(dir_name, "scatterplots%03d.jpeg", sep = '/'),
          width = 1080, height = 1080, units = "px", pointsize = 24)
@@ -66,11 +66,11 @@ pw.scatter <- function(Y, notes = NULL, dir_name = '.', par_param = c(3, 3), ...
   par(mfrow = par_param)
   for (i in 1:(n - 1)) {
     for (j in (i + 1):n) {
-      col1 = Y[, i] 
-      col2 = Y[, j]
-      name1 = colnames(Y)[i]
-      name2 = colnames(Y)[j]
-      p_cor = round(cor(col1, col2, method = "pearson"), 3)
+      col1 <- Y[, i] 
+      col2 <- Y[, j]
+      name1 <- colnames(Y)[i]
+      name2 <- colnames(Y)[j]
+      p_cor <- round(cor(col1, col2, method = "pearson"), 3)
       plot(log10(col1 + 1), log10(col2 + 1), col = "blue", xlab = name1, ylab = name2, 
            main = paste(name1, "vs.", name2), sub = paste("Pearson's cor =", p_cor), col.sub = "red",
            ...)
@@ -80,8 +80,33 @@ pw.scatter <- function(Y, notes = NULL, dir_name = '.', par_param = c(3, 3), ...
   dev.off()
 }
 
-#' Plot a Heatmap for Pairwise Expression Correlation
+#' Plot a Heat map for Pairwise Correlation
+#' 
+#' Plot the pairwise correlations of columns of a given matrix in a heat map.
+#' 
+#' @param Y the matrix whose pairwise correlations between columns we are interested in.
+#' @param inds the array of column indices of `Y` we wish to plot. The default is all columns of `Y`.
+#' @import ggplot2
+#' 
+#' @examples
+#' Y <- matrix(c(1:4, 1:4, 4:1), 4, 3)
+#' p <- pw.cor.heatmap(Y)
+#' p2 <- pw.cor.heatmap(Y, c(1, 3))
+#' p
+#' p2
+#' 
+#' @export
 
-pw.cor.heatmap <- function(Y, coldata) {
-  ## TODO: finish the function
+pw.cor.heatmap <- function(Y, inds = seq_len(ncol(Y))) {
+  cor_mat <- cor(Y[, inds])
+  rownames(cor_mat) <- colnames(cor_mat) <- colnames(Y)
+  cor_df <- reshape2::melt(t(cor_mat))
+  cor_plot <- ggplot2::ggplot(cor_df, ggplot2::aes(x = Var1, y = Var2, fill = value)) + 
+    ggplot2::geom_tile() +
+    ggplot2::theme(axis.title.x=element_blank(),
+          axis.title.y=element_blank(),
+          axis.text.x=element_blank(),
+          axis.ticks.x=element_blank()) +
+    ggplot2::scale_fill_gradient(low = 'yellow', high = 'red')
+  cor_plot
 }
