@@ -48,6 +48,7 @@ get.GSE.microarray <- function(acc_number, take_log = FALSE, ...) {
   ))
   data_matrix <- apply(data_matrix, 2, function(x) {as.numeric(as.character(x))})
   data_matrix <- data_matrix[, which(!is.na(colSums(data_matrix)))]
+  rownames(data_matrix) <- gse_probe_subsets
   if (take_log) data_matrix <- log2(data_matrix) # log2-transform if take_log is TRUE
   
   ## getting the phenotype data
