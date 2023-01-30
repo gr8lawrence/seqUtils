@@ -110,3 +110,54 @@ pw.cor.heatmap <- function(Y, inds = seq_len(ncol(Y))) {
     ggplot2::scale_fill_gradient(low = 'yellow', high = 'red')
   cor_plot
 }
+
+#' Plot a Heatmap for an Expression Value Matrix
+#' 
+#' This function will plot a heatmap for an expression value matrix. It will automatically group genes
+#' that are highly expressed for each column so the diagonal blocks of the heatmap show the highest expression values.
+#' This function will be particularly helpful for constructing a heatmap of a signature matrix or a differential expression map.
+#' 
+#' 
+#' @param sig_mat The matrix for which the heatmap is plotted.
+#' @param plot_title Custom title for thie plot. Default is 'Signature Matrix Heatmap'.
+#' @param names The names of the columns of the final heatmap. Default is `colnames(sig_name)`.
+#' 
+#' @export
+
+make.heatmap <- function(sig_mat, plot_title = 'Signature Matrix Heatmap', names = colnames(sig_name)) {
+  sig_ordered <- rearrange.matrix(sig_mat) 
+  p_sig <- make.theta.heat.map(sig_ordered, plot_title)
+  p_sig
+}
+
+#' Function to Rearrange The Expression Matrix
+#'
+
+rearrange.matrix <- function(Theta_star) {
+  inds <- apply(Theta_star, 1, function(x) which(x == max(x)))
+  genes_ordered <- names(inds)[order(inds, decreasing = TRUE)]
+  Theta_ordered <- Theta_star[genes_ordered, ]
+  Theta_ordered
+}
+
+#' Function to Produce The Heatmap from a Matrix Using `ggplot2`
+#' 
+#' @importFrom reshape2 melt
+#' @import ggplot2
+
+make.theta.heat.map <- function(Theta_star, title, all_names) {
+  heat_df <- reshape2::melt(Theta_star) 
+  colnames(heat_df) <- c('gene', 'ct', 'value')
+  p <- ggplot(heat_df, aes(x = ct, y = gene, fill = log10(value + 1))) +
+    geom_tile() +
+    labs(title = title,
+         x = 'Cell type',
+         y = 'Gene feature') +
+    theme(axis.text.y = element_blank(),
+          axis.ticks = element_blank(),
+          text = element_text(size = 18)) +
+    scale_fill_distiller(palette = 'YlGnBu')
+  p
+}
+
+

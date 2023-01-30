@@ -2,6 +2,7 @@
 
 export(expr.bp)
 export(get.GSE.microarray)
+export(make.heatmap)
 export(man.filter)
 export(pw.cor.heatmap)
 export(pw.scatter)
@@ -13,4 +14,5 @@ importFrom(GEOquery,Meta)
 importFrom(GEOquery,Table)
 importFrom(GEOquery,getGEO)
 importFrom(dplyr,as_tibble)
+importFrom(reshape2,melt)
 importFrom(tidyr,pivot_longer)

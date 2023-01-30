@@ -29,29 +29,29 @@
 #' @export
 
 man.filter <- function(raw, min_sum = 10, min_var = 1e-4, verbose = TRUE) {
-  all_ids = NULL
+  all_ids <- NULL
   ## remove non-genes in the rawrix
-  bad_name_ids = which(substr(rownames(raw), 1, 1) == "_")
-  all_ids = union(all_ids, bad_name_ids)
+  bad_name_ids <- which(substr(rownames(raw), 1, 1) == "_")
+  all_ids <- union(all_ids, bad_name_ids)
   
   ## keep genes with more than min_sum reads
-  no_read_ids = which(rowSums(raw) < min_sum)
-  all_ids = union(all_ids, no_read_ids)
+  no_read_ids <- which(rowSums(raw) < min_sum)
+  all_ids <- union(all_ids, no_read_ids)
   
   ## remove genes with no variance
-  no_var_ids = which(rowSums((raw - rowMeans(raw))^2) < min_var)
-  all_ids = union(all_ids, no_var_ids)
+  no_var_ids <- which(rowSums((raw - rowMeans(raw))^2) < min_var)
+  all_ids <- union(all_ids, no_var_ids)
   
   ## remove duplicate rows
-  dup_ids = which(duplicated.array(raw))
-  all_ids = union(all_ids, dup_ids)
+  dup_ids <- which(duplicated.array(raw))
+  all_ids <- union(all_ids, dup_ids)
   
   ## remove grand totals
-  gt_ids = which(rownames(raw) == "Grand Total")
-  all_ids = union(all_ids, gt_ids)
+  gt_ids <- which(rownames(raw) == "Grand Total")
+  all_ids <- union(all_ids, gt_ids)
   
   ## filter rows
-  if (length(all_ids) > 0) raw = raw[-all_ids, ]
+  if (length(all_ids) > 0) raw <- raw[-all_ids, ]
   
   ## print messages
   if (verbose) {
@@ -68,4 +68,3 @@ man.filter <- function(raw, min_sum = 10, min_var = 1e-4, verbose = TRUE) {
   
   return(raw)
 }
-
