@@ -148,15 +148,15 @@ rearrange.matrix <- function(Theta_star) {
 make.theta.heat.map <- function(Theta_star, title, all_names) {
   heat_df <- reshape2::melt(Theta_star) 
   colnames(heat_df) <- c('gene', 'ct', 'value')
-  p <- ggplot(heat_df, aes(x = ct, y = gene, fill = log10(value + 1))) +
-    geom_tile() +
-    labs(title = title,
-         x = 'Cell type',
-         y = 'Gene feature') +
-    theme(axis.text.y = element_blank(),
-          axis.ticks = element_blank(),
-          text = element_text(size = 18)) +
-    scale_fill_distiller(palette = 'YlGnBu')
+  p <- ggplot2::ggplot(heat_df, aes(x = ct, y = gene, fill = log10(value + 1))) +
+    ggplot2::geom_tile() +
+    ggplot2::labs(title = title,
+                  x = 'Cell type',
+                  y = 'Gene feature') +
+    ggplot2::theme(axis.text.y = element_blank(),
+                   axis.ticks = element_blank(),
+                   text = element_text(size = 18)) +
+    ggplot2::scale_fill_distiller(palette = 'YlGnBu')
   p
 }
 
