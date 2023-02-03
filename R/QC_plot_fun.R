@@ -87,6 +87,7 @@ pw.scatter <- function(Y, notes = NULL, dir_name = '.', par_param = c(3, 3), ...
 #' @param Y the matrix whose pairwise correlations between columns we are interested in.
 #' @param inds the array of column indices of `Y` we wish to plot. The default is all columns of `Y`.
 #' @import ggplot2
+#' @importFrom viridis scale_fill_viridis
 #' 
 #' @examples
 #' Y <- matrix(c(1:4, 1:4, 4:1), 4, 3)
@@ -107,7 +108,8 @@ pw.cor.heatmap <- function(Y, inds = seq_len(ncol(Y))) {
           axis.title.y=element_blank(),
           axis.text.x=element_blank(),
           axis.ticks.x=element_blank()) +
-    ggplot2::scale_fill_gradient(low = 'yellow', high = 'red')
+    viridis::scale_fill_viridis()
+    # ggplot2::scale_fill_gradient(low = 'yellow', high = 'red')
   cor_plot
 }
 
